@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do you want a PAPI?</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #fff0f6);
+      text-align: center;
+      padding-top: 100px;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 2.8em;
+      color: #d63384;
+    }
+    button {
+      font-size: 1.4em;
+      padding: 12px 30px;
+      margin: 20px;
+      border: none;
+      border-radius: 15px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      max-width: 90vw;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .no-button {
+      background-color: #e91e63;
+    }
+    .no-button:hover {
+      background-color: #c2185b;
+    }
+    #response {
+      font-size: 1.6em;
+      color: #c2185b;
+      margin-top: 50px;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .hearts {
+      position: fixed;
+      bottom: -50px;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      transform: rotate(45deg);
+      animation: floatUp 6s infinite ease-in;
+    }
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-1000px) scale(1.5) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2em; }
+      button { font-size: 1.2em; padding: 10px 24px; }
+      body { padding-top: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Do you want a PAPI? 😘</h1>
+
+  <button id="yes-btn" onclick="givePapi()">Yes 💚</button>
+  <button class="no-button" onclick="noPapi()">No 💔</button>
+
+  <div id="response"></div>
+  <div class="hearts" id="hearts-container"></div>
+
+  <audio id="romantic-bgm" src="https://github.com/Ananguy/audio/raw/refs/heads/main/happy.mp3"></audio>
+  <audio id="sad-bgm" src="https://github.com/Ananguy/audio/raw/refs/heads/main/sad.mp3"></audio>
+
+  <script>
+    let noClickCount = 0;
+    let yesBtnSize = 1.4;
+
+    function givePapi() {
+      document.getElementById("response").innerHTML = `
+        <div style="color: #c2185b;">
+          MUAHHH 💋💋💋 I LOVEEEEEEE UUU 💖<br><br>
+          <span style="font-size: 0.9em; color: #333;">
+            You’re my keyboard ⌨️, because you’re just my type 😍…<br>
+            and I would love pressing your buttons all night 😏💘
+          </span>
+        </div>`;
+      document.getElementById("response").style.animation = "fadeIn 2s forwards";
+
+      document.getElementById("sad-bgm").pause();
+      document.getElementById("sad-bgm").currentTime = 0;
+      const romanticAudio = document.getElementById("romantic-bgm");
+      romanticAudio.play();
+
+      const container = document.getElementById("hearts-container");
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDelay = Math.random() * 3 + "s";
+        heart.style.backgroundColor = ["#ff85c0", "#ff4d6d", "#ff99cc"][Math.floor(Math.random()*3)];
+        container.appendChild(heart);
+      }
+    }
+
+    function noPapi() {
+      document.getElementById("romantic-bgm").pause();
+      document.getElementById("romantic-bgm").currentTime = 0;
+      const sadAudio = document.getElementById("sad-bgm");
+      sadAudio.play();
+
+      const messages = [
+        "u sure, u don't want a KISS? 💋",
+        "wanna try again? 😚",
+        "BABY CLICK YESSS!!! 🥺",
+        "I can OFFER u MY PP? 😏💦",
+        "okay i quit, uuuu rrrrrrr meannnnnnnn!!!!! 😩💔"
+      ];
+
+      const yesBtn = document.getElementById("yes-btn");
+      yesBtnSize += 0.5;
+      yesBtn.style.fontSize = `${yesBtnSize}em`;
+      yesBtn.style.maxWidth = "90vw";
+
+      if (noClickCount >= messages.length - 1) {
+        document.getElementById("response").innerHTML = `<span style=\"color: #e91e63;\">${messages[messages.length - 1]}</span>`;
+        document.getElementById("response").style.animation = "fadeIn 2s forwards";
+        document.querySelector(".no-button").disabled = true;
+        document.querySelector(".no-button").style.opacity = 0.5;
+        return;
+      }
+
+      const msg = messages[noClickCount];
+      noClickCount++;
+
+      document.getElementById("response").innerHTML = `<span style=\"color: #e91e63;\">${msg}</span>`;
+      document.getElementById("response").style.animation = "fadeIn 2s forwards";
+    }
+  </script>
+
+</body>
+</html>
